@@ -79,9 +79,104 @@ def inversoAditivoMatriz(A):
 
     return multiplicacionEscalarMatriz([-1,0],A)
     
-    
-                
+def transpuestaMatrizCompleja(A):
+    '''La transpuesta de una matriz compleja es cambiar filas por columnas.El
+    Resultado es una matriz'''
 
+    
+    filas = len(A)
+    columnas = len(A[0])
+    matriz_respuesta = [[[0,0]]*filas for x in range(columnas)]
+
+    for i in range(filas):
+        for j in range(columnas):
+            matriz_respuesta[j][i] = A[i][j]
+
+    return matriz_respuesta
+
+def transpuestaVectorComplejo(v):
+    '''La transpuesta de un vector complejo es cambiar las filas por la columna.
+    El resultado es una matriz'''
+
+    filas = len(v)
+    matriz_respuesta = [v]
+
+    return matriz_respuesta
+
+def conjugadaMatrizCompleja(A):
+    '''La conjugada de una matriz compleja es hacer el conjugado a cada punto de
+    la matriz.El resultado es una matriz'''
+
+    filas = len(A)
+    columnas = len(A[0])
+
+    for i in range(filas):
+        for j in range(columnas):
+            A[i][j] = NC.conjugado(A[i][j])
+    return A
+    
+def conjugadaVectorComplejo(v):
+    '''La conjugada de un vector complejo es hacer el conjugado a cada punto del
+    vector matriz.El resultado es una matriz'''
+
+    filas = len(v)
+
+    for i in range(filas):
+        v[i] = NC.conjugado(v[i])
+    return v
+
+def adjuntaMatrizCompleja(A):
+    '''La adjunta de una matriz compleja es la transpuesta de la conjugada.El
+    resultado es una matriz'''
+
+    return transpuestaMatrizCompleja(conjugadaMatrizCompleja(A))
+
+def adjuntaVectorComplejo(v):
+    '''La adjunta de un vector complejo es la transpuesta de la conjugada.El
+    resultado es una matriz'''
+
+    return transpuestaVectorComplejo(conjugadaVectorComplejo(v))
+
+def productoMatricialComplejo(A, B):
+    '''El produco de dos matrices complejas es solo posible si el numero de
+    columas de A es igual al numero de filas de B, de ser asi se multiplica fila
+    por columna y se suman los resultados, esto da como resultado cada punto de
+    la matriz respuesta.'''
+
+    matriz_respuesta = []
+    filasA = len(A)
+    columnasA = len(A[0])
+    filasB = len(B)
+    columnasB = len(B[0])
+    try:
+        if columnasA != filasB:
+            raise NameError('Error. Las matrices no tienen dimensiones compatibles.')
+        
+    except NameError:
+        print("Error. Las matrices no tienen dimensiones compatibles.")
+    else:
+        matriz_respuesta = [ [[0,0]]*columnasB for x in range(filasA) ]
+
+        for i in range(filasA):
+            for j in range(columnasB):
+               for k in range(filasB):
+                   matriz_respuesta[i][j] = NC.suma(matriz_respuesta[i][j],
+                                                  NC.producto(A[i][k], B[k][j]))
+        
+        
+        return matriz_respuesta
+
+def accionMatrizSobreVectorComplejo(A, v):
+    '''La accion de una matriz compleja sobre un vector complejos es el producto
+    de de estos, cuando son compatibles (igual que en la multiplicacion matricial.
+    El restultado es una vector'''
+    
+    for x in range(len(v)):
+        v[x] = [v[x]]
+        
+    return productoMatricialComplejo(A, v)
+    
+        
 #print(adicionVectores([ [8,3],[-1,-4],[0,-9] ],[ [8,-3],[2,5],[3,0] ]))
 #print(multiplicacionEscalarVector([-1,1], [ [-2,5],[-1,-1],[2,-9] ]))            
 #print(inversoAditivoVector([ [-5,2],[3,0],[0,-1] ]))
@@ -89,4 +184,14 @@ def inversoAditivoMatriz(A):
 #                      [[ [-7,-2],[-4,-2],[7,7] ],[ [5,9],[0,3],[6,-5] ],[ [1,5],[-6,-6],[5,8] ]]))
 #print(multiplicacionEscalarMatriz([-2,3],
 #                                  [[ [3,-2],[8,-4] ],[ [4,-10],[-2,-8]]]))
-print(inversoAditivoMatriz([ [ [7,3],[-1,7] ],[ [-9,-4],[-7,-9] ]]))
+#print(inversoAditivoMatriz([ [ [7,3],[-1,7] ],[ [-9,-4],[-7,-9] ]]))
+#print(transpuestaMatrizCompleja([ [[5,9],[-7,-5],[-1,-4]],[[8,2],[-3,-7],[7,-8]] ]))
+#print(transpuestaVectorComplejo([ [1,1],[2,2] ]))
+#print(conjugadaMatrizCompleja( [ [[-6,1],[3,8]],[[2,-6],[3,0]]] ))
+#print(adjuntaMatrizCompleja( [ [[7,7],[3,8],[8,4]],[[5,0],[8,-6],[-10,-1]]] ))
+#print(productoMatricialComplejo( [ [[-6,2],[0,6],[7,2]],[[6,9],[7,7],[-6,-6]],[[5,8],[-6,8],[6,9]] ],
+#                                 [ [[9,-6],[-3,-4],[5,-2]],[[3,6],[-1,-5],[0,-5]],[[9,9],[8,-4],[-8,-4]] ]))
+#print(productoMatricialComplejo( [[[2,1],[3,0],[1,-1]],[[0,0],[0,-2],[7,-3]],[[3,0],[0,0],[1,-2]]],
+#                                 [[[0,-1],[1,0]],[[0,0],[0,1]]]))
+print(accionMatrizSobreVectorComplejo( [[[-1,5],[1,-7],[-6,3]],[[-3,-9],[2,-5],[1,-10]],[[-6,5],[6,-5],[3,-2]]],
+                                       [[1,-3],[4,3],[-3,1]]))
