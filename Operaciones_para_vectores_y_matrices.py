@@ -1,4 +1,5 @@
 import Numeros_complejos as NC
+import math
 
 
 def adicionVectores(v1,v2):
@@ -16,9 +17,8 @@ def adicionVectores(v1,v2):
     else:
         
         for i in range(0,len(v1)):
-            aux = []
-            aux.append(NC.suma(v1[i],v2[i]))
-            vector_respuesta.append(aux)
+            vector_respuesta.append(NC.suma(v1[i],v2[i]))
+            
         return vector_respuesta
 
 def inversoAditivoVector(v):
@@ -33,7 +33,7 @@ def multiplicacionEscalarVector(c,v):
 
     vector_respuesta = []
     for i in range(0, len(v)):
-        vector_respuesta.append([NC.producto(c,v[i])])
+        vector_respuesta.append(NC.producto(c,v[i]))
 
     return vector_respuesta
 
@@ -143,6 +143,7 @@ def productoMatricialComplejo(A, B):
     por columna y se suman los resultados, esto da como resultado cada punto de
     la matriz respuesta.'''
 
+
     matriz_respuesta = []
     filasA = len(A)
     columnasA = len(A[0])
@@ -170,13 +171,58 @@ def accionMatrizSobreVectorComplejo(A, v):
     '''La accion de una matriz compleja sobre un vector complejos es el producto
     de de estos, cuando son compatibles (igual que en la multiplicacion matricial.
     El restultado es una vector'''
-    
+
     for x in range(len(v)):
         v[x] = [v[x]]
-        
+
     return productoMatricialComplejo(A, v)
+
+def productoInternoVectoresComplejos(v1, v2):
+    '''El producto interno entre dos vectores <v1,v2> es la adjunta del v1
+    multiplicado por el v2. El resultado es un numero complejo'''
     
-        
+    return accionMatrizSobreVectorComplejo(adjuntaVectorComplejo(v1), v2)[0][0]
+
+def normaVectorComplejo(v):
+    '''La norma de un vector complejo es la raiz cuadrada del producto interno
+    de el mismo.El resultado es un entero'''
+    v1 = v
+    v2 = v[:]
+    
+    return productoInternoVectoresComplejos(v1, v2)[0]**0.5
+
+def distanciaVectoresComplejos(v1, v2):
+    '''La distancia entre dos vectores complejos es la norma de la resta de los
+    mismos.El resultado es un entero'''
+    return normaVectorComplejo(adicionVectores(v1, inversoAditivoVector(v2)))
+
+def esMatrizUnitaria(A):
+    
+    filas = len(A)
+    columnas = len(A[0])
+
+    if filas != columnas:
+        return False
+    else:
+        I = [[[0,0]]*filas for x in range(columnas)]
+        B = [[[0,0]]*filas for x in range(columnas)]
+        for i in range(filas):
+            for j in range(columnas):
+                B[i][j] = A[i][j]
+                if i == j:
+                    I[i][j] = [1,1]
+                    
+        return productoMatricialComplejo(A, adjuntaMatrizCompleja(B)) == I
+
+def esMatrizHermitania(A):
+    filas = len(A)
+    columnas = len(A[0])
+    B = [[[0,0]]*filas for x in range(columnas)]
+    for i in range(filas):
+            for j in range(columnas):
+                B[i][j] = A[i][j]
+    return adjuntaMatrizCompleja(B) == A
+    
 #print(adicionVectores([ [8,3],[-1,-4],[0,-9] ],[ [8,-3],[2,5],[3,0] ]))
 #print(multiplicacionEscalarVector([-1,1], [ [-2,5],[-1,-1],[2,-9] ]))            
 #print(inversoAditivoVector([ [-5,2],[3,0],[0,-1] ]))
@@ -193,5 +239,12 @@ def accionMatrizSobreVectorComplejo(A, v):
 #                                 [ [[9,-6],[-3,-4],[5,-2]],[[3,6],[-1,-5],[0,-5]],[[9,9],[8,-4],[-8,-4]] ]))
 #print(productoMatricialComplejo( [[[2,1],[3,0],[1,-1]],[[0,0],[0,-2],[7,-3]],[[3,0],[0,0],[1,-2]]],
 #                                 [[[0,-1],[1,0]],[[0,0],[0,1]]]))
-print(accionMatrizSobreVectorComplejo( [[[-1,5],[1,-7],[-6,3]],[[-3,-9],[2,-5],[1,-10]],[[-6,5],[6,-5],[3,-2]]],
-                                       [[1,-3],[4,3],[-3,1]]))
+#print(accionMatrizSobreVectorComplejo( [[[-1,5],[1,-7],[-6,3]],[[-3,-9],[2,-5],[1,-10]],[[-6,5],[6,-5],[3,-2]]],
+#                                       [[1,-3],[4,3],[-3,1]]))
+#print(productoInternoVectoresComplejos([ [2,-1],[-8,-5],[-2,-6] ],
+#                              [ [6,-3],[5,-1],[-6,-2]]))
+#print(normaVectorComplejo( [[4,5],[3,1],[0,-7]] ))
+#print(distanciaVectoresComplejos( [[2,7],[4,-1],[2,-4]],
+#                                  [[7,8],[2,-8],[1,4]]))
+#print(esMatrizUnitaria( [ [[1/(2**0.5),0],[0,1/(2**0.5)]],[[0,1/(2**0.5)],[1/(2**0.5),0]] ] ))
+print(esMatrizHermitania( [[[],[],[]],[[],[],[]],[[],[],[]]] ))
