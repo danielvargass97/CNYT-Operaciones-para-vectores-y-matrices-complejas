@@ -3,7 +3,7 @@
 ## Carné: 2140905
 ## @: daniel.vargas-o@mail.escuelaing.edu.co
 
-### Trabajo 2: Libreria de operaciones para vectores y matrices complejas. (2/213/2020)
+### Trabajo 2: Libreria de operaciones para vectores y matrices complejas. (2/13/2020)
 * **Descripcion:** En este proyecto utilizamos el lenguaje de programacion python para realizar una libreria de operaciones para vectores y matrices complejas la cual incluye 17 funciones, de las cuales todas las  funciones son de operaciones de matrices y vectores complejos
 * **La librería contiene las siguientes operaciones:**
 
