@@ -197,6 +197,8 @@ def distanciaVectoresComplejos(v1, v2):
     return normaVectorComplejo(adicionVectores(v1, inversoAditivoVector(v2)))
 
 def esMatrizUnitaria(A):
+    '''Identificar si una matriz es unitaria es mirar si la matria A multiplicada
+    por adjunta(A) es iguual a la matriz identidad del tamaño correspondiente'''
     
     filas = len(A)
     columnas = len(A[0])
@@ -210,11 +212,19 @@ def esMatrizUnitaria(A):
             for j in range(columnas):
                 B[i][j] = A[i][j]
                 if i == j:
-                    I[i][j] = [1,1]
+                    I[i][j] = [1,0]
                     
-        return productoMatricialComplejo(A, adjuntaMatrizCompleja(B)) == I
+        aux = productoMatricialComplejo(A, adjuntaMatrizCompleja(B))
 
+        for x in range(len(A)):
+            for y in range(len(A[0])):
+                aux[x][y][0] = round(aux[x][y][0], 0)
+        return aux == I
+    
 def esMatrizHermitania(A):
+    '''Identificar si una matriz es hermitania es mirar si la matriz A es igual
+    a la adjunta de A'''
+    
     filas = len(A)
     columnas = len(A[0])
     B = [[[0,0]]*filas for x in range(columnas)]
@@ -222,29 +232,25 @@ def esMatrizHermitania(A):
             for j in range(columnas):
                 B[i][j] = A[i][j]
     return adjuntaMatrizCompleja(B) == A
+
+def productoTensorial(A,B):
+
+    filasA = len(A)
+    filasB = len(B)
+    columnasA = len(A[0])
+    columnasB = len(B[0])
     
-#print(adicionVectores([ [8,3],[-1,-4],[0,-9] ],[ [8,-3],[2,5],[3,0] ]))
-#print(multiplicacionEscalarVector([-1,1], [ [-2,5],[-1,-1],[2,-9] ]))            
-#print(inversoAditivoVector([ [-5,2],[3,0],[0,-1] ]))
-#print(adicionMatrices([[ [-8,-3],[-6,-4],[0,-4] ],[ [-1,8],[6,-10],[8,-5] ],[ [4,0],[8,5],[-7,-9]]],
-#                      [[ [-7,-2],[-4,-2],[7,7] ],[ [5,9],[0,3],[6,-5] ],[ [1,5],[-6,-6],[5,8] ]]))
-#print(multiplicacionEscalarMatriz([-2,3],
-#                                  [[ [3,-2],[8,-4] ],[ [4,-10],[-2,-8]]]))
-#print(inversoAditivoMatriz([ [ [7,3],[-1,7] ],[ [-9,-4],[-7,-9] ]]))
-#print(transpuestaMatrizCompleja([ [[5,9],[-7,-5],[-1,-4]],[[8,2],[-3,-7],[7,-8]] ]))
-#print(transpuestaVectorComplejo([ [1,1],[2,2] ]))
-#print(conjugadaMatrizCompleja( [ [[-6,1],[3,8]],[[2,-6],[3,0]]] ))
-#print(adjuntaMatrizCompleja( [ [[7,7],[3,8],[8,4]],[[5,0],[8,-6],[-10,-1]]] ))
-#print(productoMatricialComplejo( [ [[-6,2],[0,6],[7,2]],[[6,9],[7,7],[-6,-6]],[[5,8],[-6,8],[6,9]] ],
-#                                 [ [[9,-6],[-3,-4],[5,-2]],[[3,6],[-1,-5],[0,-5]],[[9,9],[8,-4],[-8,-4]] ]))
-#print(productoMatricialComplejo( [[[2,1],[3,0],[1,-1]],[[0,0],[0,-2],[7,-3]],[[3,0],[0,0],[1,-2]]],
-#                                 [[[0,-1],[1,0]],[[0,0],[0,1]]]))
-#print(accionMatrizSobreVectorComplejo( [[[-1,5],[1,-7],[-6,3]],[[-3,-9],[2,-5],[1,-10]],[[-6,5],[6,-5],[3,-2]]],
-#                                       [[1,-3],[4,3],[-3,1]]))
-#print(productoInternoVectoresComplejos([ [2,-1],[-8,-5],[-2,-6] ],
-#                              [ [6,-3],[5,-1],[-6,-2]]))
-#print(normaVectorComplejo( [[4,5],[3,1],[0,-7]] ))
-#print(distanciaVectoresComplejos( [[2,7],[4,-1],[2,-4]],
-#                                  [[7,8],[2,-8],[1,4]]))
-#print(esMatrizUnitaria( [ [[1/(2**0.5),0],[0,1/(2**0.5)]],[[0,1/(2**0.5)],[1/(2**0.5),0]] ] ))
-print(esMatrizHermitania( [[[],[],[]],[[],[],[]],[[],[],[]]] ))
+    matriz_respuesta = [[[0,0]]*(filasA*filasB) for o in range(columnasA*columnasB)]
+    #for i in range(len(matriz_respuesta)):
+    #    print(matriz_respuesta[i])
+    for x in range(filasA):
+        for y in range(columnasA):
+            aux = multiplicacionEscalarMatriz(A[x][y],B)
+            for i in range(filasB):
+                for j in range(columnasB):
+                    matriz_respuesta[(filasA*x)+i][(columnasA*y)+j] = aux[i][j]
+    for i in range(len(matriz_respuesta)):
+        print(matriz_respuesta[i])
+
+#print(productoTensorial( [[[1,1],[0,0]],[[1,0],[0,1]]],
+#                         [[[-1,2],[-2,-2],[0,2]],[[2,3],[3,1],[2,2]],[[-2,1],[1,-1],[2,1]]]))
