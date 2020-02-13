@@ -234,6 +234,11 @@ def esMatrizHermitania(A):
     return adjuntaMatrizCompleja(B) == A
 
 def productoTensorial(A,B):
+    '''el producto tensorial V ⊗ W de dos espacios vectoriales V y W
+    (sobre el mismo campo) es en sí mismo un espacio vectorial, dotado
+    de la operación de composición bilineal, denotada por ⊗, de pares
+    ordenados en el producto cartesiano V × W a V ⊗ W de una manera
+    que generaliza el producto externo.'''
 
     filasA = len(A)
     filasB = len(B)
@@ -241,16 +246,14 @@ def productoTensorial(A,B):
     columnasB = len(B[0])
     
     matriz_respuesta = [[[0,0]]*(filasA*filasB) for o in range(columnasA*columnasB)]
-    #for i in range(len(matriz_respuesta)):
-    #    print(matriz_respuesta[i])
+
     for x in range(filasA):
         for y in range(columnasA):
             aux = multiplicacionEscalarMatriz(A[x][y],B)
             for i in range(filasB):
                 for j in range(columnasB):
-                    matriz_respuesta[(filasA*x)+i][(columnasA*y)+j] = aux[i][j]
-    for i in range(len(matriz_respuesta)):
-        print(matriz_respuesta[i])
 
-#print(productoTensorial( [[[1,1],[0,0]],[[1,0],[0,1]]],
-#                         [[[-1,2],[-2,-2],[0,2]],[[2,3],[3,1],[2,2]],[[-2,1],[1,-1],[2,1]]]))
+                    matriz_respuesta[(filasB*x)+i][(columnasB*y)+j] = aux[i][j]
+    return matriz_respuesta
+
+
